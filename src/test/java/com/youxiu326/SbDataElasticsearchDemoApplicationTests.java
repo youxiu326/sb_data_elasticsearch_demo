@@ -4,6 +4,8 @@ import com.youxiu326.entity.Article;
 import com.youxiu326.repositories.ArticleRepository;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
+import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
@@ -11,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.SearchResultMapper;
@@ -18,12 +21,16 @@ import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.data.elasticsearch.core.aggregation.impl.AggregatedPageImpl;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.data.domain.Pageable;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -88,7 +95,7 @@ public class SbDataElasticsearchDemoApplicationTests {
 
         // 创建一个查询对象
         NativeSearchQuery query = new NativeSearchQueryBuilder()
-                .withQuery(QueryBuilders.queryStringQuery("中华小当家2").defaultField("title"))
+                .withQuery(queryStringQuery("中华小当家2").defaultField("title"))
                 .withPageable(PageRequest.of(0,15))
                 .build();
 
@@ -96,6 +103,49 @@ public class SbDataElasticsearchDemoApplicationTests {
         List<Article> articles = template.queryForList(query, Article.class);
         articles.forEach(it-> System.out.println(it));
     }
+
+
+    @Test
+    public void searchCity() {
+        // 分页参数
+        Pageable pageable = PageRequest.of(0, 100);
+
+        String pinyin="中华";
+
+        // Function Score Query
+        FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders.functionScoreQuery(
+                boolQuery()
+                        .should(boolQuery()
+                                .must(queryStringQuery("*地名*").defaultField("type").boost(8))
+                                .must(queryStringQuery(pinyin).defaultField("name_pinyin")))
+                        .should(boolQuery()
+                                .must(queryStringQuery("*公园*").defaultField("type").boost(10))
+                                .must(queryStringQuery(pinyin).defaultField("name_pinyin")))
+                        .should(boolQuery()
+                                .must(queryStringQuery("*广场*").defaultField("type").boost(10))
+                                .must(queryStringQuery(pinyin).defaultField("name_pinyin")))
+                        .should(boolQuery()
+                                .must(queryStringQuery("*风景名胜*").defaultField("type").boost(10))
+                                .must(queryStringQuery(pinyin).defaultField("name_pinyin")))
+                        .should(boolQuery()
+                                .must(queryStringQuery("*交通*").defaultField("type").boost(5))
+                                .must(queryStringQuery(pinyin).defaultField("name_pinyin")))
+                        .should(boolQuery()
+                                .must(queryStringQuery("*餐厅*").defaultField("type").boost(3))
+                                .must(queryStringQuery(pinyin).defaultField("name_pinyin")))
+        );
+
+        // 创建搜索 DSL 查询
+        SearchQuery searchQuery = new NativeSearchQueryBuilder()
+                .withPageable(pageable)
+                .withQuery(functionScoreQueryBuilder).build();
+
+
+        Page<Article> searchPageResults = articleRepository.search(searchQuery);
+        List<Article> content = searchPageResults.getContent();
+        System.out.println(content);
+    }
+
 
     /**
      * 高亮查询 报错了
@@ -105,7 +155,7 @@ public class SbDataElasticsearchDemoApplicationTests {
 
         String fild="content";
         NativeSearchQuery nativeSearchQuery=new NativeSearchQueryBuilder()
-                .withQuery(QueryBuilders.queryStringQuery("中国").defaultField(fild))
+                .withQuery(queryStringQuery("中国").defaultField(fild))
                 .withHighlightFields(new HighlightBuilder.Field(fild))
                 .build();
         AggregatedPage<Article> list =  template.queryForPage(nativeSearchQuery, Article.class, new SearchResultMapper() {
