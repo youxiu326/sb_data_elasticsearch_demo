@@ -110,29 +110,12 @@ public class SbDataElasticsearchDemoApplicationTests {
         // 分页参数
         Pageable pageable = PageRequest.of(0, 100);
 
-        String pinyin="中华";
-
         // Function Score Query
         FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders.functionScoreQuery(
                 boolQuery()
-                        .should(boolQuery()
-                                .must(queryStringQuery("*地名*").defaultField("type").boost(8))
-                                .must(queryStringQuery(pinyin).defaultField("name_pinyin")))
-                        .should(boolQuery()
-                                .must(queryStringQuery("*公园*").defaultField("type").boost(10))
-                                .must(queryStringQuery(pinyin).defaultField("name_pinyin")))
-                        .should(boolQuery()
-                                .must(queryStringQuery("*广场*").defaultField("type").boost(10))
-                                .must(queryStringQuery(pinyin).defaultField("name_pinyin")))
-                        .should(boolQuery()
-                                .must(queryStringQuery("*风景名胜*").defaultField("type").boost(10))
-                                .must(queryStringQuery(pinyin).defaultField("name_pinyin")))
-                        .should(boolQuery()
-                                .must(queryStringQuery("*交通*").defaultField("type").boost(5))
-                                .must(queryStringQuery(pinyin).defaultField("name_pinyin")))
-                        .should(boolQuery()
-                                .must(queryStringQuery("*餐厅*").defaultField("type").boost(3))
-                                .must(queryStringQuery(pinyin).defaultField("name_pinyin")))
+                        .should(boolQuery().must(queryStringQuery("bi").defaultField("title").boost(8)))
+                        .should(boolQuery().must(queryStringQuery("哔哩").defaultField("content").boost(3)))
+                        .should(boolQuery().must(queryStringQuery("中华小当家1").defaultField("title").boost(25)))
         );
 
         // 创建搜索 DSL 查询
@@ -143,68 +126,7 @@ public class SbDataElasticsearchDemoApplicationTests {
 
         Page<Article> searchPageResults = articleRepository.search(searchQuery);
         List<Article> content = searchPageResults.getContent();
-        System.out.println(content);
-    }
-
-
-    /**
-     * 高亮查询 报错了
-     */
-    @Test
-    public void testNativeSearchQueryHighlight(){
-
-        String fild="content";
-        NativeSearchQuery nativeSearchQuery=new NativeSearchQueryBuilder()
-                .withQuery(queryStringQuery("中国").defaultField(fild))
-                .withHighlightFields(new HighlightBuilder.Field(fild))
-                .build();
-        AggregatedPage<Article> list =  template.queryForPage(nativeSearchQuery, Article.class, new SearchResultMapper() {
-            @Override
-            public <T> AggregatedPage<T> mapResults(SearchResponse response, Class<T> clazz, Pageable pageable) {
-                List<Article> films = new ArrayList<>();
-                SearchHits hits = response.getHits();
-                for (SearchHit hit:hits){
-                    if(hits.getHits().length<=0){
-                        return null;
-                    }
-                    Article film=new Article();
-                    String hightLightMessage = hit.getHighlightFields().get(fild).fragments()[0].toString();
-                    film.setId(Long.parseLong(hit.getId()));
-                    film.setTitle(hit.getSource().get("title").toString());
-                    film.setContent(hit.getSource().get("content").toString());
-
-                    try {
-                        String setMethodName = parSetName(fild);
-                        Class<? extends Article> filmClass = film.getClass();
-                        Method setMethod = filmClass.getMethod(setMethodName,String.class);
-                        setMethod.invoke(film,hightLightMessage);
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-                    films.add(film);
-
-                }
-                if (films.size()>0){
-                    return new AggregatedPageImpl<>((List<T>) films);
-                }
-                return null;
-            }
-        });
-
-        list.getContent().forEach(film -> System.out.println(film));
-    }
-
-
-
-    public String parSetName(String fieldName){
-        if (null == fieldName || "".equals(fieldName)) {
-            return null;
-        }
-        int startIndex = 0;
-        if (fieldName.charAt(0) == '_')
-            startIndex = 1;
-        return "set" + fieldName.substring(startIndex, startIndex + 1).toUpperCase()
-                + fieldName.substring(startIndex + 1);
+        content.forEach(it-> System.out.println(it));
     }
 
 }
