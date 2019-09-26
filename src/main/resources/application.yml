@@ -7,10 +7,14 @@ spring:
       cluster-name: elasticsearch
 
   datasource:
-    url: jdbc:mysql://youxiu326.xin:3306/mybatis?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://youxiu326.xin:3306/my_elasticsearch?useUnicode=true&characterEncoding=utf8
     username: youxiu326
     password: zz123456.ZZ
     driver-class-name: com.mysql.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
 
   redis:
     host: youxiu326.xin
