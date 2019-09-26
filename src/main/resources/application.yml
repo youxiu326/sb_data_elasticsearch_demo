@@ -5,3 +5,13 @@ spring:
         enabled: true
       cluster-nodes: 49.235.105.251:9300
       cluster-name: elasticsearch
+
+  datasource:
+    url: jdbc:mysql://youxiu326.xin:3306/mybatis?useUnicode=true&characterEncoding=utf8
+    username: youxiu326
+    password: zz123456.ZZ
+    driver-class-name: com.mysql.jdbc.Driver
+
+  redis:
+    host: youxiu326.xin
+    port: 6379
