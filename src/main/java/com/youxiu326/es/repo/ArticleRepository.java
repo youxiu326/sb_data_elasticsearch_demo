@@ -1,6 +1,6 @@
-package com.youxiu326.repositories;
+package com.youxiu326.es.repo;
 
-import com.youxiu326.entity.Article;
+import com.youxiu326.es.vo.Article;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 

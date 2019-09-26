@@ -1,4 +1,4 @@
-package com.youxiu326.entity;
+package com.youxiu326.es.vo;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
