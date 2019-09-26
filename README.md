@@ -17,3 +17,8 @@ http://localhost:8080/swagger-ui.html
 5).加载已解压的扩展程序。
 6).使用时点击扩展图标即可，可以将 SQL 语句翻译成 DSL
 `
+
+`
+官网示例
+https://github.com/NLPchina/elasticsearch-sql
+`
