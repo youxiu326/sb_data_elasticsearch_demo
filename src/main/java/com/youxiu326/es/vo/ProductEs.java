@@ -41,6 +41,78 @@ public class ProductEs implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern ="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
+    @Field(type = FieldType.Double)
+    private double price;
 
+    public long getId() {
+        return id;
+    }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public ProductEs() {
+    }
+
+    public ProductEs(long id, String code, String keyword, String name, Date createTime, double price) {
+        this.id = id;
+        this.code = code;
+        this.keyword = keyword;
+        this.name = name;
+        this.createTime = createTime;
+        this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductEs{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", keyword='" + keyword + '\'' +
+                ", name='" + name + '\'' +
+                ", createTime=" + createTime +
+                ", price=" + price +
+                '}';
+    }
 }
