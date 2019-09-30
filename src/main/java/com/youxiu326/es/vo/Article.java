@@ -9,6 +9,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.io.Serializable;
 
+@Deprecated
 @Document(indexName = "sdes_blog",type = "article")
 public class Article implements Serializable {
 

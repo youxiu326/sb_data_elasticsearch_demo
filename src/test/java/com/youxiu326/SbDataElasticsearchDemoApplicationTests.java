@@ -22,6 +22,7 @@ import java.util.List;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
+@Deprecated
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class SbDataElasticsearchDemoApplicationTests {
