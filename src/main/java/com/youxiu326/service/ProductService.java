@@ -1,4 +1,6 @@
 package com.youxiu326.service;
 
-public interface ProductService {
+import com.youxiu326.entity.Product;
+
+public interface ProductService extends BaseService<Product, String>{
 }
