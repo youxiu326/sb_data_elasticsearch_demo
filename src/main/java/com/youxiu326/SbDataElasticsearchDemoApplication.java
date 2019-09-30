@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableElasticsearchRepositories
-@EntityScan("com.youxiu326.entity")
-@EnableJpaRepositories("com.youxiu326.dao")
+//@EntityScan("com.youxiu326.entity")
+//@EnableJpaRepositories("com.youxiu326.dao")
 public class SbDataElasticsearchDemoApplication {
 
     public static void main(String[] args) {

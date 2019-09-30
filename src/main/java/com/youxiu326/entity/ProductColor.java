@@ -63,4 +63,13 @@ public class ProductColor extends BaseEntity {
     public void setImg(String img) {
         this.img = img;
     }
+
+    @Override
+    public String toString() {
+        return "ProductColor{" +
+                "product=" + product +
+                ", color=" + color +
+                ", img='" + img + '\'' +
+                '}';
+    }
 }

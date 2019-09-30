@@ -17,8 +17,7 @@ public class ProductEs implements Serializable {
      * 存储 索引index=true
      */
     @Id
-    @Field(type = FieldType.Long,store = true)
-    private long id;
+    private String id;
 
 
     /**
@@ -37,6 +36,9 @@ public class ProductEs implements Serializable {
     @Field(type = FieldType.Text,store = true,searchAnalyzer = "ik_max_word",analyzer = "ik_smart")
     private String name;
 
+    @Field(type = FieldType.Keyword,index = false)
+    private String img;
+
     @Field(type = FieldType.Date,format = DateFormat.custom, pattern ="yyyy-MM-dd HH:mm:ss")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern ="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
@@ -50,12 +52,14 @@ public class ProductEs implements Serializable {
     @Field(type = FieldType.Text,store = true,searchAnalyzer = "ik_max_word",analyzer = "ik_smart")
     private String colorName;
 
+    @Field(type = FieldType.Text,store = true,searchAnalyzer = "ik_max_word",analyzer = "ik_smart")
+    private String colorCode;
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -83,6 +87,30 @@ public class ProductEs implements Serializable {
         this.name = name;
     }
 
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+    public String getColorId() {
+        return colorId;
+    }
+
+    public void setColorId(String colorId) {
+        this.colorId = colorId;
+    }
+
+    public String getColorName() {
+        return colorName;
+    }
+
+    public void setColorName(String colorName) {
+        this.colorName = colorName;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -99,27 +127,43 @@ public class ProductEs implements Serializable {
         this.price = price;
     }
 
+    public String getColorCode() {
+        return colorCode;
+    }
+
+    public void setColorCode(String colorCode) {
+        this.colorCode = colorCode;
+    }
+
     public ProductEs() {
     }
 
-    public ProductEs(long id, String code, String keyword, String name, Date createTime, double price) {
+    public ProductEs(String id, String code, String keyword, String name, String img, Date createTime, double price, String colorId, String colorName, String colorCode) {
         this.id = id;
         this.code = code;
         this.keyword = keyword;
         this.name = name;
+        this.img = img;
         this.createTime = createTime;
         this.price = price;
+        this.colorId = colorId;
+        this.colorName = colorName;
+        this.colorCode = colorCode;
     }
 
     @Override
     public String toString() {
         return "ProductEs{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", code='" + code + '\'' +
                 ", keyword='" + keyword + '\'' +
                 ", name='" + name + '\'' +
+                ", img='" + img + '\'' +
                 ", createTime=" + createTime +
                 ", price=" + price +
+                ", colorId='" + colorId + '\'' +
+                ", colorName='" + colorName + '\'' +
+                ", colorCode='" + colorCode + '\'' +
                 '}';
     }
 }
