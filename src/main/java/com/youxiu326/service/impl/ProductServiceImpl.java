@@ -1,4 +1,11 @@
 package com.youxiu326.service.impl;
 
-public class ProductServiceImpl {
+import com.youxiu326.service.ProductService;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+
+@Transactional
+@Service
+public class ProductServiceImpl implements ProductService {
 } 

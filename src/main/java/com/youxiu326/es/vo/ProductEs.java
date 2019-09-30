@@ -44,6 +44,13 @@ public class ProductEs implements Serializable {
     @Field(type = FieldType.Double)
     private double price;
 
+    @Field(type = FieldType.Keyword)
+    private String colorId;
+
+    @Field(type = FieldType.Text,store = true,searchAnalyzer = "ik_max_word",analyzer = "ik_smart")
+    private String colorName;
+
+
     public long getId() {
         return id;
     }
