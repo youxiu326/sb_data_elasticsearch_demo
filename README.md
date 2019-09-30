@@ -22,6 +22,21 @@ http://localhost:8080/swagger-ui.html
 官网示例
 https://github.com/NLPchina/elasticsearch-sql
 
+Aggregations
+https://github.com/NLPchina/elasticsearch-sql/wiki/Aggregations
+
 博客学习
 https://blog.csdn.net/wenwen513/article/details/85163168
+
+
+elasticsearch sql 查询语句
+
+ SELECT COUNT(*),SUM(price),MIN(price), MAX(price),AVG(price) FROM product_index/product
+
+http://49.235.105.251:9200/_sql?sql=select * FROM product_index/product
+
+http://49.235.105.251:9200/_sql/_explain?sql=select * FROM product_index/product
+
+http://49.235.105.251:9200/_sql?sql=select price FROM product_index/product  order by price
+
 `
