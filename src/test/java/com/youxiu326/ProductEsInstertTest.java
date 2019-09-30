@@ -40,6 +40,9 @@ public class ProductEsInstertTest {
 
     }
 
+    /**
+     * 新增数据
+     */
     @Test
     public void testInstert(){
 
