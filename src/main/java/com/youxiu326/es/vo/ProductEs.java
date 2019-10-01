@@ -6,12 +6,77 @@ import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Document(indexName = "product_index",type = "product")
 public class ProductEs implements Serializable {
+
+    /**
+     * 颜色对象
+     */
+    public static class ProductColorEs{
+
+        @Field(type = FieldType.Keyword)
+        private String id;
+
+        @Field(type = FieldType.Keyword)
+        private String productId;
+
+        @Field(type = FieldType.Text,store = true,searchAnalyzer = "ik_max_word",analyzer = "ik_smart")
+        private String colorCode;
+
+        /**
+         * ik分词器建议是索引时使用ik_max_word将搜索内容进行细粒度分词，
+         * 搜索时使用ik_smart提高搜索精确性
+         */
+        @Field(type = FieldType.Text,store = true,searchAnalyzer = "ik_max_word",analyzer = "ik_smart")
+        private String colorName;
+
+        @Field(type = FieldType.Keyword)
+        private String img;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getProductId() {
+            return productId;
+        }
+
+        public void setProductId(String productId) {
+            this.productId = productId;
+        }
+
+        public String getColorCode() {
+            return colorCode;
+        }
+
+        public void setColorCode(String colorCode) {
+            this.colorCode = colorCode;
+        }
+
+        public String getColorName() {
+            return colorName;
+        }
+
+        public void setColorName(String colorName) {
+            this.colorName = colorName;
+        }
+
+        public String getImg() {
+            return img;
+        }
+
+        public void setImg(String img) {
+            this.img = img;
+        }
+    }
 
     /**
      * 存储 索引index=true
@@ -54,6 +119,14 @@ public class ProductEs implements Serializable {
 
     @Field(type = FieldType.Text,store = true,searchAnalyzer = "ik_max_word",analyzer = "ik_smart")
     private String colorCode;
+
+
+    /**
+     * https://blog.csdn.net/laoyang360/article/details/82950393
+     * 嵌套对象
+     */
+    @Field( type = FieldType.Nested)
+    private List<ProductColorEs> colors;
 
     public String getId() {
         return id;
@@ -133,6 +206,14 @@ public class ProductEs implements Serializable {
 
     public void setColorCode(String colorCode) {
         this.colorCode = colorCode;
+    }
+
+    public List<ProductColorEs> getColors() {
+        return colors;
+    }
+
+    public void setColors(List<ProductColorEs> colors) {
+        this.colors = colors;
     }
 
     public ProductEs() {

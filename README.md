@@ -28,6 +28,8 @@ https://github.com/NLPchina/elasticsearch-sql/wiki/Aggregations
 博客学习
 https://blog.csdn.net/wenwen513/article/details/85163168
 
+查看索引mapping
+http://49.235.105.251:9200/product_index/_mapping?pretty
 
 elasticsearch sql 查询语句
 

@@ -3,6 +3,7 @@ package com.youxiu326;
 import com.youxiu326.entity.ProductColor;
 import com.youxiu326.es.repo.ProductEsRepository;
 import com.youxiu326.es.vo.ProductEs;
+import com.youxiu326.es.vo.ProductEs.ProductColorEs;
 import com.youxiu326.service.ProductColorService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,10 +61,32 @@ public class ProductEsInstertTest {
             es.setColorName(it.getColor().getName());// 颜色名称
             es.setColorCode(it.getColor().getCode()); // 颜色编号
             es.setCreateTime(it.getCreateTime()); // 创建时间
+            // 设置其他颜色集合
+            // 例如: 帆布鞋 有红 白 黄三种颜色 ，红帆布鞋(ProductEs) 其他颜色对象有红帆布鞋，白帆布鞋，黄帆布鞋(ProductColorEs)
+            es.setColors(getColors(it.getProduct().getId()));
             esList.add(es);
         });
 
         productEsRepository.saveAll(esList);
+
+    }
+
+    private List<ProductColorEs> getColors(String productId){
+        List<ProductColorEs> productColorEsList = new ArrayList<>();
+        List<ProductColor> productColors = productColorService.findByProductId(productId);
+        if (productColors.isEmpty())
+            return null;
+        productColors.stream().forEach(it->{
+            ProductColorEs productColorEs = new ProductColorEs();
+            productColorEs.setId(it.getId());//商品颜色id
+            productColorEs.setColorCode(it.getColor().getCode());//颜色编号
+            productColorEs.setColorName(it.getColor().getName());//颜色名称
+            productColorEs.setImg(it.getImg());//展示图
+            productColorEs.setProductId(it.getProduct().getId());//商品id
+            productColorEsList.add(productColorEs);
+        });
+
+        return productColorEsList;
 
     }
 
