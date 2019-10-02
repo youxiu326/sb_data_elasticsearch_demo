@@ -12,7 +12,6 @@ import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,5 +59,17 @@ public class ProductEsService {
         return productEsRepository.findById(id).orElse(null);
     }
 
+
+    public List<ProductEs> findByKeyword(String keyword){
+
+        NativeSearchQuery query = new NativeSearchQueryBuilder()
+                .withQuery(QueryBuilders.matchQuery("keyword",keyword))
+                .withPageable(PageRequest.of(0,500 ))
+                .build();
+
+        List<ProductEs> productEsList = template.queryForList(query, ProductEs.class);
+        return productEsList;
+
+    }
 
 }
