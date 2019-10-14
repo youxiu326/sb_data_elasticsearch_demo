@@ -42,3 +42,22 @@ http://49.235.105.251:9200/_sql/_explain?sql=select * FROM product_index/product
 http://49.235.105.251:9200/_sql?sql=select price FROM product_index/product  order by price
 
 `
+
+
+
+
+
+
+
+`
+POST /sdes_blog/article/_delete_by_query?refresh&slices=5&pretty
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+`
+
+
+
