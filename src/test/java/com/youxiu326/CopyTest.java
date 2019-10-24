@@ -9,6 +9,7 @@ import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.bucket.terms.StringTerms;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -87,19 +88,23 @@ public class CopyTest {
             System.out.println("内容："+ProductEs);
         }
     }
-    @org.junit.Test
-    public void getIndex4() {
-        //创建原生查询器
-        NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
-        //聚和条件
-        builder.addAggregation(AggregationBuilders.terms("popolarBrand").field("brand"));
-        //查询返回带聚合的结果
-        AggregatedPage<ProductEs> ProductEss = template.queryForPage(builder.build(), ProductEs.class);
 
+    /**
+     * 测试聚合查询
+     */
+    @Test
+    public void testAggs(){
+
+        //创建原生查询器
+        NativeSearchQueryBuilder queryBuilder  = new NativeSearchQueryBuilder();
+        // 聚合 聚合 keyword
+        queryBuilder.addAggregation(AggregationBuilders.terms("colorIdTerm").field("colorId"));
+        //查询并返回带聚合结果
+        AggregatedPage<ProductEs> result = template.queryForPage(queryBuilder.build(), ProductEs.class);
         //解析聚合
-        Aggregations aggs = ProductEss.getAggregations();
+        Aggregations aggs = result.getAggregations();
         //获取指定名称的聚合
-        StringTerms terms =aggs.get("popolarBrand");
+        StringTerms terms =aggs.get("colorIdTerm");
         //获取桶
         List<StringTerms.Bucket> buckets = terms.getBuckets();
         //获取数据
@@ -109,4 +114,6 @@ public class CopyTest {
         }
 
     }
+
+
 }
