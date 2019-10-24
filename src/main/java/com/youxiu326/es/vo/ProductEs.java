@@ -24,7 +24,7 @@ public class ProductEs implements Serializable {
         @Field(type = FieldType.Keyword)
         private String productId;
 
-        @Field(type = FieldType.Text,store = true,searchAnalyzer = "ik_max_word",analyzer = "ik_smart")
+        @Field(type = FieldType.Keyword)
         private String colorCode;
 
         /**
@@ -114,10 +114,10 @@ public class ProductEs implements Serializable {
     @Field(type = FieldType.Keyword)
     private String colorId;
 
-    @Field(type = FieldType.Text,store = true,searchAnalyzer = "ik_max_word",analyzer = "ik_smart")
+    @Field(type = FieldType.Keyword)
     private String colorName;
 
-    @Field(type = FieldType.Text,store = true,searchAnalyzer = "ik_max_word",analyzer = "ik_smart")
+    @Field(type = FieldType.Keyword)
     private String colorCode;
 
 

@@ -97,14 +97,15 @@ public class CopyTest {
 
         //创建原生查询器
         NativeSearchQueryBuilder queryBuilder  = new NativeSearchQueryBuilder();
-        // 聚合 聚合 keyword
-        queryBuilder.addAggregation(AggregationBuilders.terms("colorIdTerm").field("colorId"));
+        // 聚合 聚合 keyword类型，text类型会报错
+        // http://youxiu326.com:9200/product_index/_mapping?pretty
+        queryBuilder.addAggregation(AggregationBuilders.terms("colorNameTerm").field("colorName"));
         //查询并返回带聚合结果
         AggregatedPage<ProductEs> result = template.queryForPage(queryBuilder.build(), ProductEs.class);
         //解析聚合
         Aggregations aggs = result.getAggregations();
         //获取指定名称的聚合
-        StringTerms terms =aggs.get("colorIdTerm");
+        StringTerms terms =aggs.get("colorNameTerm");
         //获取桶
         List<StringTerms.Bucket> buckets = terms.getBuckets();
         //获取数据
