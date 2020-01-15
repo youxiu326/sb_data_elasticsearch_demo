@@ -1,7 +1,8 @@
 # sb_data_elasticsearch_demo
 sb data elasticsearch 学习例子
 
-
+###### 拼音分词
+http://www.mamicode.com/info-detail-2472236.html
 
 
 http://localhost:8080/swagger-ui.html
